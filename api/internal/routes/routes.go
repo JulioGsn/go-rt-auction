@@ -3,9 +3,9 @@ package routes
 import (
 	"net/http"
 
-	"github.com/juliogsn/job-not-found/internal/handlers/jobs"
+	"github.com/juliogsn/rt-auction/internal/handlers/jobs"
 )
 
 func Router() {
-	http.HandleFunc("/jobs", jobs.List)
+	http.HandleFunc("GET /jobs", jobs.List)
 }

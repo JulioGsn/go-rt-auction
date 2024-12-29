@@ -1,0 +1,4 @@
+First of all, I need to begin with the easiest flow possible to validate the app.
+
+An action is happening, the user bidder enters and make a bid to the item being auctioned
+
