@@ -1,4 +1,4 @@
-module github.com/juliogsn/rt-auction
+module github.com/juliogsn/go-rt-auction
 
 go 1.23.3
 
