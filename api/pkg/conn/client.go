@@ -1,4 +1,4 @@
-package main
+package conn
 
 import (
 	"bytes"
@@ -22,16 +22,6 @@ const (
 	// Maximum message size allowed from peer.
 	maxMessageSize = 512
 )
-
-type Bidder struct {
-	Id   int    `json:"id"`
-	Name string `json:"name"`
-}
-
-type Message struct {
-	Type string      `json:"type"`
-	Data interface{} `json:"data"`
-}
 
 var (
 	newline = []byte{'\n'}
@@ -135,27 +125,27 @@ func (c *Client) writePump() {
 	}
 }
 
-func serveWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
+func (c *Client) GetSend() chan []byte {
+  return c.send
+}
+
+func (c *Client) GetConn() *websocket.Conn {
+  return c.conn
+}
+
+func ServeWs(hub *Hub, w http.ResponseWriter, r *http.Request) *Client {
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
 		log.Println(err)
-		return
+		return nil
 	}
 	client := &Client{hub: hub, conn: conn, send: make(chan []byte, 256)}
 	client.hub.register <- client
-
-	bidder := Bidder{
-		Id:   1,
-		Name: "Mr Zé da Silva",
-	}
-	message := Message{
-		Type: "bidder",
-		Data: bidder,
-	}
-	client.conn.WriteJSON(message)
 
 	// Alow collection of memory referenced by the caller by doing all work in
 	// new goroutines.
 	go client.writePump()
 	go client.readPump()
+
+  return client
 }
