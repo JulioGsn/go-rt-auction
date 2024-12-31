@@ -1,27 +1,31 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title></title>
-    <link href="./style.css" rel="stylesheet">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>RT Auction</title>
+    <link href="/style.css" rel="stylesheet" />
   </head>
   <body>
-    
-    <h1>RT auction</h1>
+    <h1>RT auctions</h1>
 
-    Message: <input type="text" id="input-message">
-    <button type="button" id="send-message">Send message</button>
-
-    <br>
-    <br>
-    <br>
-    <hr>
     <div>
-      <ul id="list-messages"></ul>
+      <span id="item-name"></span>
+      |
+      <span id="item-base-price"></span>
     </div>
 
-    <script src="./script.js" />
-      
+    <!--Message: <input type="text" id="input-message" />-->
+    <!--<button type="button" id="send-message">Send message</button>-->
+
+    <br />
+    <br />
+    <br />
+    <hr />
+    <div>
+      <ul id="list-bidders"></ul>
+    </div>
+
+    <script src="http://localhost:8080/script.js"></script>
   </body>
 </html>

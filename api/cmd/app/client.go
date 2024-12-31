@@ -23,6 +23,16 @@ const (
 	maxMessageSize = 512
 )
 
+type Bidder struct {
+	Id   int    `json:"id"`
+	Name string `json:"name"`
+}
+
+type Message struct {
+	Type string      `json:"type"`
+	Data interface{} `json:"data"`
+}
+
 var (
 	newline = []byte{'\n'}
 	space   = []byte{' '}
@@ -38,7 +48,7 @@ var upgrader = websocket.Upgrader{
 	CheckOrigin:     CheckOrigin,
 }
 
-// client is a middleman between the websocket connection and the hub.
+// Client is a middleman between the websocket connection and the hub.
 type Client struct {
 	hub *Hub
 
@@ -49,7 +59,7 @@ type Client struct {
 	send chan []byte
 }
 
-// readPump pumps mesages from the websocket connection to the hub.
+// readPump pumps messages from the websocket connection to the hub.
 //
 // The applicatin runs readPump in a per-connection goroutine. The application
 // ensures that there is at most one reader on a connection by executing all
@@ -132,10 +142,20 @@ func serveWs(hub *Hub, w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	client := &Client{hub: hub, conn: conn, send: make(chan []byte, 256)}
-  client.hub.register <- client
+	client.hub.register <- client
 
-  // Alow collection of memory referenced by the caller by doing all work in
-  // new goroutines.
-  go client.writePump()
-  go client.readPump()
+	bidder := Bidder{
+		Id:   1,
+		Name: "Mr Zé da Silva",
+	}
+	message := Message{
+		Type: "bidder",
+		Data: bidder,
+	}
+	client.conn.WriteJSON(message)
+
+	// Alow collection of memory referenced by the caller by doing all work in
+	// new goroutines.
+	go client.writePump()
+	go client.readPump()
 }
